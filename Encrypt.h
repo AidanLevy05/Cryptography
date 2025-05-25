@@ -10,8 +10,6 @@ Creation Date: May 24, 2025
 #include <cmath>
 using namespace std;
 
-
-
 /*
 Name: isPrime()
 Parameters: long long
