@@ -31,4 +31,6 @@ long long modInverse(long long a, long long b);
 __int128 modInverse(__int128 a, __int128 m);
 
 long long rsaEncrypt(long long m, long long e, long long n);
+__int128 rsaEncrypt(__int128 m, __int128 e, __int128 n);
 long long rsaDecrypt(long long c, long long d, long long n);
+__int128 rsaDecrypt(__int128 c, __int128 d, __int128 n);

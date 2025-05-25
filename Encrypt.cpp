@@ -324,6 +324,19 @@ long long rsaEncrypt(long long m, long long e, long long n) {
 }
 
 /*
+Name: rsaEncrypt()
+Parameters: __int128 m, __int128 e, __int128 n
+Return: __int128
+Description: 
+
+Encrypts a message m using the RSA public key (e, n). 
+Returns the ciphertext c = m^e % n.
+*/
+__int128 rsaEncrypt(__int128 m, __int128 e, __int128 n) {
+    return modPow(m, e, n);
+}
+
+/*
 Name: rsaDecrypt()
 Parameters: long long c, long long d, long long n
 Return: long long
@@ -333,5 +346,18 @@ Decrypts a ciphertext c using the RSA private key (d, n).
 Returns the original message m = c^d % n.
 */
 long long rsaDecrypt(long long c, long long d, long long n) {
+    return modPow(c, d, n);
+}
+
+/*
+Name: rsaDecrypt()
+Parameters: __int128 c, __int128 d, __int128 n
+Return: __int128
+Description: 
+
+Decrypts a ciphertext c using the RSA private key (d, n). 
+Returns the original message m = c^d % n.
+*/
+__int128 rsaDecrypt(__int128 c, __int128 d, __int128 n) {
     return modPow(c, d, n);
 }
