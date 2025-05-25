@@ -69,9 +69,22 @@ int main() {
 
     div("rsaEncrypt and rsaDecrypt test");
 
-    int primeBitSize = 32;
-    __int128 p = generateLargePrime(primeBitSize);
-    __int128 q = generateLargePrime(primeBitSize);
+    int primeBitSize = 1;
+    cout << "Enter prime bit size: " << endl;
+    cin >> primeBitSize;
+
+    __int128 p, q;
+    if (primeBitSize >= 32) {
+        p = generateLargePrime128(primeBitSize);
+        q = generateLargePrime128(primeBitSize);
+    } else {
+        p = generateLargePrime(primeBitSize);
+        q = generateLargePrime(primeBitSize);
+    }
+    
+    if (p == q) {
+        throw string("Error: p and q are equal.");
+    }
     __int128 n = p * q;
     __int128 phi = (p-1) * (q-1);
 
@@ -84,7 +97,13 @@ int main() {
     }
 
     __int128 d = modInverse(e, phi);
+    if ((__int128(e)*d)%phi != 1) {
+        throw string("Error: e*d % phi != 1. Modular inverse broken.");
+    }
     __int128 message = 12345;
+    if (message >= n) {
+        throw string("Error: Message too large. Must be less than modulus n.");
+    }
     __int128 cipher = rsaEncrypt(message, e, n);
     __int128 decrypted = rsaDecrypt(cipher, d, n);
 

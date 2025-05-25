@@ -20,6 +20,7 @@ void startTimer();
 double stopTimer();
 
 long long generateLargePrime(int bitLength);
+__int128 generateLargePrime128(int bitLength);
 bool isPrime(long long n);
 long long modPow(long long base, long long exponent, long long mod);
 long long gcd(long long a, long long b);

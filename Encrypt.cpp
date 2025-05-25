@@ -81,6 +81,51 @@ long long generateLargePrime(int bitLength) {
 }
 
 /*
+Name: generateLargePrime128()
+Parameters: int bitLength
+Return: long long
+Description: 
+
+Generates a random prime number of approximately 'bitLength' bits
+using the isPrime() function to validate
+*/
+__int128 generateLargePrime128(int bitLength) {
+    __int128 result = 0;
+    bool found = false;
+
+    #pragma omp parallel
+    {
+        mt19937_64 gen(random_device{}());
+
+        while (!found) {
+            __int128 candidate = 0;
+
+            candidate = (__int128)gen() << 64 | gen();
+
+            int extraBits = 128 - bitLength;
+            candidate = candidate >> extraBits;
+            candidate |= (__int128)1 << (bitLength - 1);
+
+            if (candidate % 2 == 0)
+                candidate++;
+
+            if (isPrime(candidate)) {
+                #pragma omp critical
+                {
+                    if (!found) {
+                        found = true;
+                        result = candidate;
+                    }
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+
+/*
 Name: isPrime()
 Parameters: long long
 Return: bool
@@ -103,8 +148,9 @@ bool isPrime(long long n) {
     }
 
     // Now, we know that n = (k * 2^e) + 1 if e >= 1 && k % 2 != 0
-    int bases[] = {2, 3, 5, 7, 11};
-    for (int i = 0; i < 5; i++) {
+    int size = 12;
+    int bases[] = {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37};
+    for (int i = 0; i < size; i++) {
         long long a = bases[i];
 
         if (a >= n-1)
@@ -307,7 +353,12 @@ __int128 modInverse(__int128 a, __int128 m) {
     if (g != 1)
         throw string("Error: No modular inverse found.");
 
-    return (x % m + m) % m;
+    __int128 result = (x % m + m) % m;
+    if ((a * result) % m != 1) {
+        throw string("Error: modInverse verification failed");
+    }
+
+    return result;
 }
 
 /*
