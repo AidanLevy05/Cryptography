@@ -64,6 +64,34 @@ int main() {
     time = stopTimer();
     totalTime(time);
 
+    div("rsaEncrypt and rsaDecrypt test");
+
+    long long p = generateLargePrime(16);
+    long long q = generateLargePrime(16);
+    long long n = p * q;
+    long long phi = (p-1) * (q-1);
+
+    long long e = 65537;
+    while (gcd(e, phi) != 1)
+        e += 2;
+
+    long long d = modInverse(e, phi);
+    long long message = 12345;
+    long long cipher = rsaEncrypt(message, e, n);
+    long long decrypted = rsaDecrypt(cipher, d, n);
+
+    cout << "(Large prime #1) p = " << p << endl;
+    cout << "(Large prime #2) q = " << q << endl;
+    cout << "(Modulus) n = " << n << endl;
+    cout << "(Euler's Totient Function) phi = " << phi << endl;
+    cout << "(Public Exponent) e = " << e << endl;
+    cout << "(Private Exponent) d = " << d << endl;
+    cout << "c = m^e % n" << endl;
+    cout << "m = c^d % n" << endl;
+    cout << "Original message: " << message << endl;
+    cout << "Encrypted: " << cipher << endl;
+    cout << "Decrypted: " << decrypted << endl;
+
     return 0;
     
 }
