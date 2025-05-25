@@ -5,10 +5,7 @@ Creation Date: May 24, 2025
 
 */
 
-#include <iostream>
-#include <fstream>
-#include <cmath>
-using namespace std;
+#include "Encrypt.h"
 
 /*
 Name: 

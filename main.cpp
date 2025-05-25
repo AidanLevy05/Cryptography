@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "Encrypt.cpp"
+#include "Encrypt.h"
 using namespace std;
 
 int main() {
