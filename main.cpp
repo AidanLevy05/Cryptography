@@ -15,10 +15,12 @@ int main() {
         32416187567,
         2305843009213693951,
         9223372036854775783,
-        18446744073709551557ULL
+        9223372036854775783LL
     };
 
     int count = sizeof(numbers) / sizeof(numbers[0]);
+
+    startTimer();
     for (int i = 0; i < count; i++) {
         if (isPrime(numbers[i])) {
             output << numbers[i] << endl;
@@ -27,8 +29,11 @@ int main() {
             cout << "Composite: " << numbers[i] << endl;
         }
     }
+    double time = stopTimer();
 
     output.close();
+
+    cout << "Total time: " << time << " seconds" << endl;
     return 0;
     
 }

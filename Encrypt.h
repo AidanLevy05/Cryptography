@@ -8,24 +8,14 @@ Creation Date: May 24, 2025
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <chrono>
 using namespace std;
+using namespace std::chrono;
 
-/*
-Name: isPrime()
-Parameters: long long
-Return: bool
-Description: 
+extern std::chrono::high_resolution_clock::time_point global_start;
 
-Returns true if the number if prime; false if composite. 
-*/
+void startTimer();
+double stopTimer();
+
 bool isPrime(long long n);
-
-/*
-Name: modPow
-Parameters: long long base, long long exponent, long long mod
-Return: long long
-Description: 
-
-Performed modular exponentiation (base ^ exponent) % mod efficiently.
-*/
 long long modPow(long long base, long long exponent, long long mod);

@@ -7,12 +7,39 @@ Creation Date: May 24, 2025
 
 #include "Encrypt.h"
 
+std::chrono::high_resolution_clock::time_point global_start;
+
 /*
 Name: 
 Parameters: 
 Return: 
 Description: 
 */
+
+/*
+Name: startTimer()
+Parameters: N/A
+Return: void
+Description: 
+
+Stores time in a global variabke
+*/
+void startTimer() {
+    global_start = high_resolution_clock::now();
+}
+
+/*
+Name: stopTimer()
+Parameters: N/A
+Return: chrono::duration<double>
+Description: 
+
+Returns elapsed time since startTimer() was called
+*/
+double stopTimer() {
+    high_resolution_clock::time_point global_end = high_resolution_clock::now();
+    return duration_cast<duration<double>>(global_end - global_start).count();
+}
 
 /*
 Name: isPrime()
