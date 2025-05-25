@@ -139,15 +139,17 @@ Description:
 Performed modular exponentiation (base ^ exponent) % mod efficiently.
 */
 long long modPow(long long base, long long exponent, long long mod) {
-    long long result = 1;
-    base %= mod;
+    __int128 result = 1;
+    __int128 b = base % mod;
+
     while (exponent > 0) {
-        if (exponent % 2 == 1)
-            result = (result * base) % mod;
-        exponent = exponent >> 1;
-        base = (base * base) % mod;
+        if (exponent & 1) 
+            result = (result * b) % mod;
+        b = (b * b) % mod;
+        exponent >>= 1;
     }
-    return result;
+
+    return (long long)result;
 }
 
 /*
@@ -161,6 +163,23 @@ Returns greatest common denominator between two numbers
 long long gcd(long long a, long long b) {
     while (b != 0) {
         long long temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+/*
+Name: gcd()
+Parameters: __int128 a, __int128 b
+Return: __int128 
+Description: 
+
+Returns greatest common denominator between two numbers
+*/
+__int128 gcd(__int128 a, __int128 b) {
+    while (b != 0) {
+        __int128 temp = b;
         b = a % b;
         a = temp;
     }
@@ -226,6 +245,32 @@ long long extendedGCD(long long a, long long b, long long &x, long long &y) {
 }
 
 /*
+Name: extendedGCD()
+Parameters: __int128 a, __int128 b, __int128 &x, __int128 &y
+Return: __int128
+Description: 
+
+Uses the extended Euclidean algorithm to find x and y such that
+a*x + b*y = gcd(a, b).
+Returns gcd(a, b).
+*/
+__int128 extendedGCD(__int128 a, __int128 b, __int128 &x, __int128 &y) {
+    if (b == 0) {
+        x = 1;
+        y = 0;
+        return a;
+    }
+
+    __int128 x1, y1;
+    __int128 gcd = extendedGCD(b, a%b, x1, y1);
+
+    x = y1;
+    y = x1 - (a/b) * y1;
+
+    return gcd;
+}
+
+/*
 Name: modInverse()
 Parameters: long long a, long long m
 Return: long long
@@ -238,6 +283,26 @@ return throw error.
 long long modInverse(long long a, long long m) {
     long long x, y;
     long long g = extendedGCD(a, m, x, y);
+
+    if (g != 1)
+        throw string("Error: No modular inverse found.");
+
+    return (x % m + m) % m;
+}
+
+/*
+Name: modInverse()
+Parameters: __int128 a, __int128 m
+Return: __int128
+Description: 
+
+Returns the modular inverse of a modulo m using the
+extended Euclidean algorithm. If no inverse exists,
+return throw error.
+*/
+__int128 modInverse(__int128 a, __int128 m) {
+    __int128 x, y;
+    __int128 g = extendedGCD(a, m, x, y);
 
     if (g != 1)
         throw string("Error: No modular inverse found.");

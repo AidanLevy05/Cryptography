@@ -1,11 +1,14 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
+#include <string>
+#include <algorithm>
 #include "Encrypt.h"
 using namespace std;
 
 void div(string);
 void totalTime(double);
+string toString(__int128 x);
 
 int main() {
 
@@ -66,31 +69,36 @@ int main() {
 
     div("rsaEncrypt and rsaDecrypt test");
 
-    long long p = generateLargePrime(16);
-    long long q = generateLargePrime(16);
-    long long n = p * q;
-    long long phi = (p-1) * (q-1);
+    int primeBitSize = 32;
+    __int128 p = generateLargePrime(primeBitSize);
+    __int128 q = generateLargePrime(primeBitSize);
+    __int128 n = p * q;
+    __int128 phi = (p-1) * (q-1);
 
-    long long e = 65537;
-    while (gcd(e, phi) != 1)
-        e += 2;
+    __int128 e = 65537;
+    if (gcd(e, phi) != 1) {
+        cout << "65537 not coprime. Trying fallback small e" << endl;
+        e = 17;
+        while (gcd(e, phi) != 1) 
+            e += 2;
+    }
 
-    long long d = modInverse(e, phi);
-    long long message = 12345;
-    long long cipher = rsaEncrypt(message, e, n);
-    long long decrypted = rsaDecrypt(cipher, d, n);
+    __int128 d = modInverse(e, phi);
+    __int128 message = 12345;
+    __int128 cipher = rsaEncrypt(message, e, n);
+    __int128 decrypted = rsaDecrypt(cipher, d, n);
 
-    cout << "(Large prime #1) p = " << p << endl;
-    cout << "(Large prime #2) q = " << q << endl;
-    cout << "(Modulus) n = " << n << endl;
-    cout << "(Euler's Totient Function) phi = " << phi << endl;
-    cout << "(Public Exponent) e = " << e << endl;
-    cout << "(Private Exponent) d = " << d << endl;
+    cout << "(Large prime #1) p = " << toString(p) << endl;
+    cout << "(Large prime #2) q = " << toString(q) << endl;
+    cout << "(Modulus) n = " << toString(n) << endl;
+    cout << "(Euler's Totient Function) phi = " << toString(phi) << endl;
+    cout << "(Public Exponent) e = " << toString(e) << endl;
+    cout << "(Private Exponent) d = " << toString(d) << endl;
     cout << "c = m^e % n" << endl;
     cout << "m = c^d % n" << endl;
-    cout << "Original message: " << message << endl;
-    cout << "Encrypted: " << cipher << endl;
-    cout << "Decrypted: " << decrypted << endl;
+    cout << "Original message: " << toString(message) << endl;
+    cout << "Encrypted: " << toString(cipher) << endl;
+    cout << "Decrypted: " << toString(decrypted) << endl;
 
     return 0;
     
@@ -108,4 +116,26 @@ void div(string m) {
 void totalTime(double t) {
     cout << fixed << setprecision(10);
     cout << "Total time: " << t << " seconds" << endl;
+}
+
+string toString(__int128 x) {
+    if (x == 0) return "0";
+
+    bool neg = false;
+    if (x < 0) {
+        neg = true;
+        x = -x;
+    }
+
+    string s;
+    while (x > 0) {
+        s += '0' + (x % 10);
+        x /= 10;
+    }
+
+    if (neg)
+        s += '-';
+    
+    reverse(s.begin(), s.end());
+    return s;
 }
